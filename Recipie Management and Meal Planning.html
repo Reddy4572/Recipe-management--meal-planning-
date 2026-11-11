@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecipeHub | Recipe Management</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f8f2;
+  color: #263b2d;
+}
+
+header {
+  background: #234b35;
+  color: white;
+  padding: 22px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 15px;
+}
+
+.hero {
+  padding: 65px 7%;
+  background: linear-gradient(120deg, #e7f1df, #fff5e4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.hero-content {
+  flex: 1;
+  min-width: 250px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  margin-bottom: 18px;
+  line-height: 1.15;
+}
+
+.hero p {
+  color: #5c6e60;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.hero img {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 22px;
+  object-fit: cover;
+  max-height: 300px;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  background: #34764b;
+  color: white;
+  padding: 12px 19px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn:hover {
+  background: #245b38;
+}
+
+section {
+  padding: 45px 7%;
+}
+
+.section-title {
+  font-size: 29px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #718074;
+  margin-bottom: 25px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 22px 0;
+}
+
+input, select {
+  padding: 12px;
+  border: 1px solid #d8e0d5;
+  border-radius: 8px;
+  font-size: 15px;
+  background: white;
+}
+
+#search {
+  flex: 1;
+  min-width: 180px;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+.recipe-card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px #203c2810;
+  transition: transform .2s;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 17px;
+}
+
+.card-content h3 {
+  margin-bottom: 10px;
+}
+
+.card-content p {
+  color: #718074;
+  font-size: 14px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.favorite {
+  background: #f9e9e5;
+  color: #a63f35;
+  border: none;
+  padding: 11px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.planner {
+  background: #edf3e9;
+}
+
+.planner-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.planner-controls select {
+  flex: 1;
+  min-width: 150px;
+}
+
+.meal-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.meal-day {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  border-left: 4px solid #579565;
+}
+
+.meal-day h3 {
+  margin-bottom: 10px;
+}
+
+.meal-day p {
+  color: #657567;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.remove-meal {
+  color: #a63f35;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+#shoppingList {
+  margin-top: 20px;
+  line-height: 2;
+}
+
+#shoppingList label {
+  display: block;
+}
+
+footer {
+  background: #234b35;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  line-height: 1.8;
+}
+
+dialog {
+  border: none;
+  border-radius: 14px;
+  padding: 25px;
+  width: min(500px, 90%);
+  margin: auto;
+  color: #263b2d;
+}
+
+dialog::backdrop {
+  background: #0008;
+}
+
+dialog h2, dialog p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.close-btn {
+  float: right;
+  background: #e9eee7;
+  color: #263b2d;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 20px 5%;
+  }
+
+  nav a {
+    margin: 0 12px 0 0;
+  }
+
+  section, .hero {
+    padding: 35px 5%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🍃 RecipeHub</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#recipes">Recipes</a>
+    <a href="#planner">Meal Planner</a>
+    <a href="#shopping">Shopping List</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>Cook Smart.<br>Eat Healthy.</h1>
+    <p>
+      Discover delicious recipes, organize your favorite dishes,
+      and plan your meals for the entire week in one place.
+    </p>
+    <a class="btn" href="#recipes">Explore Recipes →</a>
+  </div>
+  <img
+    src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80"
+    alt="Healthy meal with fresh ingredients">
+</section>
+
+<section id="recipes">
+  <h2 class="section-title">Explore Recipes 🍽️</h2>
+  <p class="subtitle">Find something delicious to cook today.</p>
+
+  <div class="search-bar">
+    <input id="search" type="text"
+      placeholder="Search recipes..." aria-label="Search recipes">
+
+    <select id="category" aria-label="Filter by category">
+      <option value="All">All Categories</option>
+      <option value="Breakfast">Breakfast</option>
+      <option value="Lunch">Lunch</option>
+      <option value="Dinner">Dinner</option>
+      <option value="Snacks">Snacks</option>
+    </select>
+  </div>
+
+  <div class="recipe-grid" id="recipeGrid"></div>
+  <p id="emptyMessage" hidden>No recipes found. Try another search.</p>
+</section>
+
+<section class="planner" id="planner">
+  <h2 class="section-title">Weekly Meal Planner 📅</h2>
+  <p class="subtitle">Choose a day and a recipe to plan your meals.</p>
+
+  <div class="planner-controls">
+    <select id="day">
+      <option>Monday</option>
+      <option>Tuesday</option>
+      <option>Wednesday</option>
+      <option>Thursday</option>
+      <option>Friday</option>
+      <option>Saturday</option>
+      <option>Sunday</option>
+    </select>
+
+    <select id="mealType">
+      <option>Breakfast</option>
+      <option>Lunch</option>
+      <option>Dinner</option>
+      <option>Snacks</option>
+    </select>
+
+    <select id="mealRecipe"></select>
+
+    <button class="btn" id="addMeal">+ Add Meal</button>
+  </div>
+
+  <div class="meal-list" id="mealList"></div>
+</section>
+
+<section id="shopping">
+  <h2 class="section-title">Grocery Shopping List 🛒</h2>
+  <p class="subtitle">
+    Generate a list of ingredients from your planned meals.
+  </p>
+  <button class="btn" id="generateList">Generate Grocery List</button>
+  <div id="shoppingList"></div>
+</section>
+
+<section id="favorites">
+  <h2 class="section-title">My Favorite Recipes ❤️</h2>
+  <p class="subtitle">Your saved recipes appear here.</p>
+  <div class="recipe-grid" id="favoriteGrid"></div>
+</section>
+</main>
+
+<dialog id="recipeDialog">
+  <button class="btn close-btn" id="closeDialog">Close ✕</button>
+  <h2 id="dialogTitle"></h2>
+  <p id="dialogDescription"></p>
+  <h3>Ingredients</h3>
+  <p id="dialogIngredients"></p>
+  <h3>Cooking Instructions</h3>
+  <p id="dialogSteps"></p>
+</dialog>
+
+<footer>
+  <h3>🍃 RecipeHub</h3>
+  <p>Plan Better. Cook Better. Eat Better.</p>
+  <p>Student HTML Project | Recipe Management & Meal Planning</p>
+</footer>
+
+<script>
+const recipes = [
+  {
+    id: 1, name: "Masala Dosa", category: "Breakfast",
+    time: "25 min",
+    image: "https://images.unsplash.com/photo-1668236543090-82eba5ee5976?auto=format&fit=crop&w=600&q=80",
+    description: "Crispy South Indian dosa with potato masala.",
+    ingredients: ["Rice batter", "Potatoes", "Onion", "Spices", "Oil"],
+    steps: "Prepare the potato masala. Spread dosa batter on a hot pan, cook until crisp, add masala and fold."
+  },
+  {
+    id: 2, name: "Fresh Fruit Bowl", category: "Breakfast",
+    time: "10 min",
+    image: "https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?auto=format&fit=crop&w=600&q=80",
+    description: "A refreshing bowl of fruits and healthy toppings.",
+    ingredients: ["Banana", "Apple", "Grapes", "Yogurt"],
+    steps: "Wash and chop the fruits. Add yogurt, mix gently and serve fresh."
+  },
+  {
+    id: 3, name: "Vegetable Biryani", category: "Lunch",
+    time: "40 min",
+    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+    description: "Aromatic rice cooked with vegetables and spices.",
+    ingredients: ["Rice", "Carrot", "Beans", "Onion", "Spices"],
+    steps: "Cook the vegetables with spices. Add washed rice and water, then cook until the rice is tender."
+  },
+  {
+    id: 4, name: "Paneer Salad", category: "Lunch",
+    time: "15 min",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=600&q=80",
+    description: "Fresh vegetables with delicious paneer pieces.",
+    ingredients: ["Paneer", "Lettuce", "Tomato", "Cucumber", "Lemon"],
+    steps: "Chop the vegetables, lightly cook the paneer if desired, combine and season with lemon."
+  },
+  {
+    id: 5, name: "Vegetable Pasta", category: "Dinner",
+    time: "25 min",
+    image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=600&q=80",
+    description: "Pasta tossed with vegetables and tomato sauce.",
+    ingredients: ["Pasta", "Tomatoes", "Capsicum", "Garlic", "Oil"],
+    steps: "Boil the pasta. Prepare a tomato and vegetable sauce, then toss the pasta with the sauce."
+  },
+  {
+    id: 6, name: "Fruit Smoothie", category: "Snacks",
+    time: "5 min",
+    image: "https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=600&q=80",
+    description: "A quick fruit drink for a refreshing break.",
+    ingredients: ["Banana", "Milk", "Strawberries"],
+    steps: "Add the fruit and milk to a blender. Blend until smooth and serve."
+  }
+];
+
+const days = [
+  "Monday", "Tuesday", "Wednesday", "Thursday",
+  "Friday", "Saturday", "Sunday"
+];
+
+const readStorage = (key, fallback) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+let favorites = readStorage("recipeHubFavorites", []);
+let meals = readStorage("recipeHubMeals", []);
+
+function saveData() {
+  try {
+    localStorage.setItem("recipeHubFavorites", JSON.stringify(favorites));
+    localStorage.setItem("recipeHubMeals", JSON.stringify(meals));
+  } catch {
+    alert("Your browser could not save the changes.");
+  }
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function recipeCard(recipe) {
+  const isFavorite = favorites.includes(recipe.id);
+
+  return `
+    <article class="recipe-card">
+      <img src="${recipe.image}" alt="${escapeHTML(recipe.name)}"
+        loading="lazy">
+      <div class="card-content">
+        <h3>${escapeHTML(recipe.name)}</h3>
+        <p>${escapeHTML(recipe.description)}</p>
+        <p>⏱ ${escapeHTML(recipe.time)} · ${escapeHTML(recipe.category)}</p>
+        <div class="card-actions">
+          <button class="btn" data-view="${recipe.id}">View Recipe</button>
+          <button class="favorite" data-favorite="${recipe.id}"
+            aria-label="Toggle favorite">
+            ${isFavorite ? "♥ Saved" : "♡ Save"}
+          </button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderRecipes() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const category = document.getElementById("category").value;
+
+  const filtered = recipes.filter(recipe =>
+    recipe.name.toLowerCase().includes(search) &&
+    (category === "All" || recipe.category === category)
+  );
+
+  document.getElementById("recipeGrid").innerHTML =
+    filtered.map(recipeCard).join("");
+
+  document.getElementById("emptyMessage").hidden = filtered.length > 0;
+
+  document.getElementById("favoriteGrid").innerHTML =
+    recipes.filter(recipe => favorites.includes(recipe.id))
+      .map(recipeCard).join("");
+
+  document.getElementById("mealRecipe").innerHTML =
+    recipes.map(recipe =>
+      `<option value="${recipe.id}">${escapeHTML(recipe.name)}</option>`
+    ).join("");
+}
+
+function renderMeals() {
+  const list = document.getElementById("mealList");
+
+  list.innerHTML = days.map(day => {
+    const dayMeals = meals.filter(meal => meal.day === day);
+
+    return `
+      <article class="meal-day">
+        <h3>${day}</h3>
+        ${dayMeals.length ? dayMeals.map(meal => {
+          const recipe = recipes.find(r => r.id === meal.recipeId);
+          if (!recipe) return "";
+
+          return `
+            <p><strong>${escapeHTML(meal.type)}:</strong>
+            ${escapeHTML(recipe.name)}</p>
+            <button class="remove-meal"
+              data-remove="${meal.id}">Remove</button>`;
+        }).join("") : "<p>No meals planned yet.</p>"}
+      </article>`;
+  }).join("");
+}
+
+document.getElementById("search").addEventListener("input", renderRecipes);
+document.getElementById("category").addEventListener("change", renderRecipes);
+
+document.addEventListener("click", event => {
+  const viewButton = event.target.closest("[data-view]");
+  const favoriteButton = event.target.closest("[data-favorite]");
+  const removeButton = event.target.closest("[data-remove]");
+
+  if (viewButton) {
+    const recipe = recipes.find(r => r.id === Number(viewButton.dataset.view));
+    if (!recipe) return;
+
+    document.getElementById("dialogTitle").textContent = recipe.name;
+    document.getElementById("dialogDescription").textContent =
+      recipe.description + " · " + recipe.time;
+    document.getElementById("dialogIngredients").textContent =
+      recipe.ingredients.join(", ");
+    document.getElementById("dialogSteps").textContent = recipe.steps;
+    document.getElementById("recipeDialog").showModal();
+  }
+
+  if (favoriteButton) {
+    const id = Number(favoriteButton.dataset.favorite);
+
+    favorites = favorites.includes(id)
+      ? favorites.filter(item => item !== id)
+      : [...favorites, id];
+
+    saveData();
+    renderRecipes();
+  }
+
+  if (removeButton) {
+    meals = meals.filter(meal => meal.id !== removeButton.dataset.remove);
+    saveData();
+    renderMeals();
+  }
+});
+
+document.getElementById("closeDialog").addEventListener("click", () => {
+  document.getElementById("recipeDialog").close();
+});
+
+document.getElementById("addMeal").addEventListener("click", () => {
+  const day = document.getElementById("day").value;
+  const type = document.getElementById("mealType").value;
+  const recipeId = Number(document.getElementById("mealRecipe").value);
+
+  meals.push({
+    id: Date.now().toString(),
+    day,
+    type,
+    recipeId
+  });
+
+  saveData();
+  renderMeals();
+});
+
+document.getElementById("generateList").addEventListener("click", () => {
+  const ingredients = new Set();
+
+  meals.forEach(meal => {
+    const recipe = recipes.find(r => r.id === meal.recipeId);
+    if (recipe) recipe.ingredients.forEach(item => ingredients.add(item));
+  });
+
+  document.getElementById("shoppingList").innerHTML =
+    ingredients.size
+      ? [...ingredients].sort().map(item =>
+          `<label><input type="checkbox"> ${escapeHTML(item)}</label>`
+        ).join("")
+      : "<p>Add meals to your weekly planner first.</p>";
+});
+
+renderRecipes();
+renderMeals();
+</script>
+
+</body>
+</html>
